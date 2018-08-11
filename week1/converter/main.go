@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
+	"math"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -103,6 +105,8 @@ func main() {
 		Edges: []Edge{},
 	}
 
+	nodeMap := make(map[string]bool)
+
 	for {
 		record, err := r.Read()
 		if err == io.EOF {
@@ -110,16 +114,24 @@ func main() {
 		}
 		failOnError(err)
 
-		asn := record[1]
 		sourceAsn := record[0]
-		size, _ := strconv.ParseFloat(record[4], 64)
+		asn := record[1]
+		name := record[2]
+		size, err := strconv.ParseFloat(record[4], 64)
+		failOnError(err)
 
-		node := Node{
-			Label:      asn,
-			Color:      getRandomColor(),
-			Attributes: Attr{},
-			ID:         asn,
-			Size:       size,
+		if !nodeMap[asn] {
+			node := Node{
+				Label:      name,
+				Color:      getRandomColor(),
+				Attributes: Attr{},
+				X:          math.Round(rand.NormFloat64()*100) / 100,
+				Y:          math.Round(rand.NormFloat64()*100) / 100,
+				ID:         asn,
+				Size:       size / 10,
+			}
+			jsonData.Nodes = append(jsonData.Nodes, node)
+			nodeMap[asn] = true
 		}
 
 		edge := Edge{
@@ -128,12 +140,10 @@ func main() {
 			TargetID:   asn,
 			Size:       1,
 		}
-
-		jsonData.Nodes = append(jsonData.Nodes, node)
 		jsonData.Edges = append(jsonData.Edges, edge)
-		fmt.Println(getRandomColor())
 	}
 
-	// jsonDataBytes, _ := json.Marshal(jsonData)
-	// fmt.Println(string(jsonDataBytes))
+	jsonDataBytes, err := json.Marshal(jsonData)
+	failOnError(err)
+	fmt.Println(string(jsonDataBytes))
 }
