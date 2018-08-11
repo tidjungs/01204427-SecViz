@@ -2,11 +2,11 @@ package main
 
 import (
 	"encoding/csv"
-	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"strconv"
 	"strings"
 )
@@ -40,10 +40,56 @@ type Edge struct {
 type Attr struct {
 }
 
+var colors = []string{
+	"#4f19c7",
+	"#c71969",
+	"#c71919",
+	"#1984c7",
+	"#c76919",
+	"#8419c7",
+	"#c79f19",
+	"#c78419",
+	"#c719b9",
+	"#199fc7",
+	"#9f19c7",
+	"#69c719",
+	"#19c719",
+	"#1919c7",
+	"#c74f19",
+	"#19c7b9",
+	"#9fc719",
+	"#c7b919",
+	"#b9c719",
+	"#3419c7",
+	"#19b9c7",
+	"#34c719",
+	"#19c784",
+	"#c7199f",
+	"#1969c7",
+	"#c71984",
+	"#1934c7",
+	"#84c719",
+	"#194fc7",
+	"#c7194f",
+	"#19c74f",
+	"#b919c7",
+	"#19c769",
+	"#19c79f",
+	"#4fc719",
+	"#c73419",
+	"#19c734",
+	"#6919c7",
+	"#c71934",
+}
+
 func failOnError(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getRandomColor() string {
+	return colors[rand.Intn(len(colors))]
 }
 
 func main() {
@@ -70,6 +116,7 @@ func main() {
 
 		node := Node{
 			Label:      asn,
+			Color:      getRandomColor(),
 			Attributes: Attr{},
 			ID:         asn,
 			Size:       size,
@@ -84,8 +131,9 @@ func main() {
 
 		jsonData.Nodes = append(jsonData.Nodes, node)
 		jsonData.Edges = append(jsonData.Edges, edge)
+		fmt.Println(getRandomColor())
 	}
 
-	jsonDataBytes, _ := json.Marshal(jsonData)
-	fmt.Println(string(jsonDataBytes))
+	// jsonDataBytes, _ := json.Marshal(jsonData)
+	// fmt.Println(string(jsonDataBytes))
 }
