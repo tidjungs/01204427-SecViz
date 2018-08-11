@@ -32,10 +32,10 @@ type Node struct {
 
 // Edge is graph edge format
 type Edge struct {
-	SourceID   string `json:"sourceID"`
-	Attributes Attr   `json:"attributes"`
-	TargetID   string `json:"targetID"`
-	Size       int    `json:"size"`
+	SourceID   string  `json:"sourceID"`
+	Attributes Attr    `json:"attributes"`
+	TargetID   string  `json:"targetID"`
+	Size       float64 `json:"size"`
 }
 
 // Attr is ...
@@ -128,10 +128,16 @@ func main() {
 				X:          math.Round(rand.NormFloat64()*100) / 100,
 				Y:          math.Round(rand.NormFloat64()*100) / 100,
 				ID:         asn,
-				Size:       size / 10,
+				Size:       size,
 			}
 			jsonData.Nodes = append(jsonData.Nodes, node)
 			nodeMap[asn] = true
+		} else {
+			for _, node := range jsonData.Nodes {
+				if node.ID == asn {
+					node.Size += size
+				}
+			}
 		}
 
 		edge := Edge{
