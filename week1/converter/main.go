@@ -9,6 +9,7 @@ import (
 	"log"
 	"math"
 	"math/rand"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -28,6 +29,19 @@ type Node struct {
 	Y          float64 `json:"y"`
 	ID         string  `json:"id"`
 	Size       float64 `json:"size"`
+}
+type Nodes []Node
+
+func (n Nodes) Len() int {
+	return len(n)
+}
+
+func (n Nodes) Less(i, j int) bool {
+	return n[i].Size < n[j].Size
+}
+
+func (n Nodes) Swap(i, j int) {
+	n[i], n[j] = n[j], n[i]
 }
 
 // SetSize of Node
@@ -178,10 +192,14 @@ func main() {
 		jsonData.Edges = append(jsonData.Edges, edge)
 	}
 
-	for index, node := range jsonData.Nodes {
-		node.SetSize(nodeSizes[node.ID])
-		jsonData.Nodes[index] = node
+	sortedNodes := Nodes{}
+	for _, node := range jsonData.Nodes {
+		node.SetSize(nodeSizes[node.ID] / 20)
+		sortedNodes = append(sortedNodes, node)
 	}
+	sort.Sort(sort.Reverse(sortedNodes))
+
+	jsonData.Nodes = sortedNodes
 	jsonDataBytes, err := json.Marshal(jsonData)
 	failOnError(err)
 	fmt.Println(string(jsonDataBytes))
