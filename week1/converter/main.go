@@ -30,6 +30,11 @@ type Node struct {
 	Size       float64 `json:"size"`
 }
 
+// SetSize of Node
+func (n *Node) SetSize(size float64) {
+	n.Size = size
+}
+
 // Edge is graph edge format
 type Edge struct {
 	SourceID   string  `json:"sourceID"`
@@ -94,10 +99,37 @@ func getRandomColor() string {
 	return colors[rand.Intn(len(colors))]
 }
 
+func createNewNodeOrIncreaseSizeExitedNode(
+	asn string,
+	name string,
+	size float64,
+	nodeMap map[string]bool,
+	jsonData *JSONData,
+) {
+	if !nodeMap[asn] {
+		node := Node{
+			Label:      name,
+			Color:      getRandomColor(),
+			Attributes: Attr{},
+			X:          math.Round(rand.NormFloat64()*100) / 100,
+			Y:          math.Round(rand.NormFloat64()*100) / 100,
+			ID:         asn,
+			Size:       size,
+		}
+		jsonData.Nodes = append(jsonData.Nodes, node)
+		nodeMap[asn] = true
+	} else {
+		for _, node := range jsonData.Nodes {
+			if node.ID == asn {
+				node.Size += size
+			}
+		}
+	}
+}
+
 func main() {
 	data, err := ioutil.ReadFile("./internal_data.csv")
 	failOnError(err)
-	// fmt.Println(string(data))
 	r := csv.NewReader(strings.NewReader(string(data)))
 
 	jsonData := JSONData{
@@ -105,9 +137,10 @@ func main() {
 		Edges: []Edge{},
 	}
 
-	nodeMap := make(map[string]bool)
-
+	nodeMap := make(map[string]Node)
+	nodeSizes := make(map[string]float64)
 	for {
+
 		record, err := r.Read()
 		if err == io.EOF {
 			break
@@ -119,8 +152,8 @@ func main() {
 		name := record[2]
 		size, err := strconv.ParseFloat(record[4], 64)
 		failOnError(err)
-
-		if !nodeMap[asn] {
+		_, exit := nodeMap[asn]
+		if !exit {
 			node := Node{
 				Label:      name,
 				Color:      getRandomColor(),
@@ -128,17 +161,13 @@ func main() {
 				X:          math.Round(rand.NormFloat64()*100) / 100,
 				Y:          math.Round(rand.NormFloat64()*100) / 100,
 				ID:         asn,
-				Size:       size,
+				Size:       0,
 			}
+			nodeMap[asn] = node
 			jsonData.Nodes = append(jsonData.Nodes, node)
-			nodeMap[asn] = true
-		} else {
-			for _, node := range jsonData.Nodes {
-				if node.ID == asn {
-					node.Size += size
-				}
-			}
 		}
+		nodeSizes[asn] += size
+		nodeSizes[sourceAsn] += size
 
 		edge := Edge{
 			SourceID:   sourceAsn,
@@ -149,6 +178,10 @@ func main() {
 		jsonData.Edges = append(jsonData.Edges, edge)
 	}
 
+	for index, node := range jsonData.Nodes {
+		node.SetSize(nodeSizes[node.ID])
+		jsonData.Nodes[index] = node
+	}
 	jsonDataBytes, err := json.Marshal(jsonData)
 	failOnError(err)
 	fmt.Println(string(jsonDataBytes))
