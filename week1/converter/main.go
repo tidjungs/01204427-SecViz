@@ -146,12 +146,12 @@ func createNewNodeOrIncreaseSizeExitedNode(
 
 func main() {
 	sortFlag := flag.Bool("sort", false, "true, false")
-	sizeFlag := flag.String("size", "bw", "bw, number")
+	sizeFlag := flag.String("size", "bw", "bw, de")
 	flag.Parse()
 	var ratio float64
 	if *sizeFlag == "bw" {
 		ratio = 20
-	} else {
+	} else if *sizeFlag == "de" {
 		ratio = 0.5
 	}
 
@@ -196,7 +196,7 @@ func main() {
 		if *sizeFlag == "bw" {
 			nodeSizes[asn] += size
 			nodeSizes[sourceAsn] += size
-		} else {
+		} else if *sizeFlag == "de" {
 			nodeSizes[asn]++
 			nodeSizes[sourceAsn]++
 		}
