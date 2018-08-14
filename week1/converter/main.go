@@ -145,8 +145,15 @@ func createNewNodeOrIncreaseSizeExitedNode(
 }
 
 func main() {
-	sortFlag := flag.Bool("sort", false, "eg: -sort=true")
+	sortFlag := flag.Bool("sort", false, "true, false")
+	sizeFlag := flag.String("size", "bw", "bw, number")
 	flag.Parse()
+	var ratio float64
+	if *sizeFlag == "bw" {
+		ratio = 20
+	} else {
+		ratio = 0.5
+	}
 
 	data, err := ioutil.ReadFile("./internal_data.csv")
 	failOnError(err)
@@ -186,8 +193,13 @@ func main() {
 			nodeMap[asn] = node
 			jsonData.Nodes = append(jsonData.Nodes, node)
 		}
-		nodeSizes[asn] += size
-		nodeSizes[sourceAsn] += size
+		if *sizeFlag == "bw" {
+			nodeSizes[asn] += size
+			nodeSizes[sourceAsn] += size
+		} else {
+			nodeSizes[asn]++
+			nodeSizes[sourceAsn]++
+		}
 
 		edge := Edge{
 			SourceID:   sourceAsn,
@@ -201,14 +213,14 @@ func main() {
 	if *sortFlag {
 		sortedNodes := Nodes{}
 		for _, node := range jsonData.Nodes {
-			node.SetSize(nodeSizes[node.ID] / 20)
+			node.SetSize(nodeSizes[node.ID] / ratio)
 			sortedNodes = append(sortedNodes, node)
 		}
 		sort.Sort(sort.Reverse(sortedNodes))
 		jsonData.Nodes = sortedNodes
 	} else {
 		for index, node := range jsonData.Nodes {
-			node.SetSize(nodeSizes[node.ID] / 20)
+			node.SetSize(nodeSizes[node.ID] / ratio)
 			jsonData.Nodes[index] = node
 		}
 	}
