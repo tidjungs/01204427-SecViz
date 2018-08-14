@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/csv"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -30,6 +31,8 @@ type Node struct {
 	ID         string  `json:"id"`
 	Size       float64 `json:"size"`
 }
+
+// Nodes is interface for slice of Nodes
 type Nodes []Node
 
 func (n Nodes) Len() int {
@@ -142,6 +145,9 @@ func createNewNodeOrIncreaseSizeExitedNode(
 }
 
 func main() {
+	sortFlag := flag.Bool("sort", false, "eg: -sort=true")
+	flag.Parse()
+
 	data, err := ioutil.ReadFile("./internal_data.csv")
 	failOnError(err)
 	r := csv.NewReader(strings.NewReader(string(data)))
@@ -192,14 +198,21 @@ func main() {
 		jsonData.Edges = append(jsonData.Edges, edge)
 	}
 
-	sortedNodes := Nodes{}
-	for _, node := range jsonData.Nodes {
-		node.SetSize(nodeSizes[node.ID] / 20)
-		sortedNodes = append(sortedNodes, node)
+	if *sortFlag {
+		sortedNodes := Nodes{}
+		for _, node := range jsonData.Nodes {
+			node.SetSize(nodeSizes[node.ID] / 20)
+			sortedNodes = append(sortedNodes, node)
+		}
+		sort.Sort(sort.Reverse(sortedNodes))
+		jsonData.Nodes = sortedNodes
+	} else {
+		for index, node := range jsonData.Nodes {
+			node.SetSize(nodeSizes[node.ID] / 20)
+			jsonData.Nodes[index] = node
+		}
 	}
-	sort.Sort(sort.Reverse(sortedNodes))
 
-	jsonData.Nodes = sortedNodes
 	jsonDataBytes, err := json.Marshal(jsonData)
 	failOnError(err)
 	fmt.Println(string(jsonDataBytes))
