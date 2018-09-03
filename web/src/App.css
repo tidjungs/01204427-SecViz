@@ -1,0 +1,32 @@
+@import '~antd/dist/antd.css';
+
+.app {
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 280px;
+}
+.card + .card {
+  margin-left: 20px;
+}
+
+.topic-label {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.topic-btn + .topic-btn {
+  margin-top: 10px;
+}
