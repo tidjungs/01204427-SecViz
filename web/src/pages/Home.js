@@ -26,7 +26,7 @@ class Home extends Component {
   };
   render() {
     return (
-      <div>
+      <div style={{ padding: '20px' }}>
         <p className="title">01204427 - Applied Security Visualization</p>
         <div className="content">
           <List
