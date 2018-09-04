@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
+import { Button } from 'antd';
 import doministicJSON from '../data/doministic';
 import internationalJSON from '../data/international';
 
@@ -51,25 +52,34 @@ const getOption = dataSet => ({
 });
 class VisualLog extends Component {
   state = {
+    dataIndex: 0,
     option: getOption(doministicJSON),
   };
-  onDataChange = dataSet => () => {
+  onDataChange = (dataSet, dataIndex) => () => {
     this.setState({
+      dataIndex,
       option: getOption(dataSet),
     });
   };
   render() {
     return (
       <div>
-        <div style={{ height: '5vh' }}>
-          <button onClick={this.onDataChange(doministicJSON)}>DOM</button>
-          <button onClick={this.onDataChange(internationalJSON)}>INTER</button>
+        <div style={{ display: 'flex', padding: '20px' }}>
+          <Button
+            disabled={this.state.dataIndex === 0}
+            style={{ marginRight: '10px' }}
+            onClick={this.onDataChange(doministicJSON, 0)}
+          >
+            DOM
+          </Button>
+          <Button
+            disabled={this.state.dataIndex === 1}
+            onClick={this.onDataChange(internationalJSON, 1)}
+          >
+            INTER
+          </Button>
         </div>
-        <ReactEcharts
-          option={this.state.option}
-          theme={'dark'}
-          style={{ height: '95vh' }}
-        />
+        <ReactEcharts option={this.state.option} style={{ height: '90vh' }} />
       </div>
     );
   }

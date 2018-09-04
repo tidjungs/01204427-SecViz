@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { List, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import './Home.css';
+import connectImg from '../img/connect.png';
 
 class Home extends Component {
   state = {
@@ -35,9 +36,7 @@ class Home extends Component {
             renderItem={item => (
               <List.Item>
                 <List.Item.Meta
-                  avatar={
-                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                  }
+                  avatar={<Avatar src={connectImg} />}
                   title={<Link to={item.url}>{item.title}</Link>}
                   description={item.description}
                 />
