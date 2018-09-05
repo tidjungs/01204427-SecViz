@@ -1,0 +1,1 @@
+cut -d " " -f 5 ./raw_data/web-anon-201704100307.0.txt | sort | uniq -c | sort -r

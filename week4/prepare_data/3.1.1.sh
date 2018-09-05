@@ -1,0 +1,1 @@
+wc -l ./raw_data/*
