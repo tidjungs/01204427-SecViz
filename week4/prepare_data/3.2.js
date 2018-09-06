@@ -19,13 +19,13 @@ const topUsers = [
 const data = res
   .filter(line => topUsers.includes(line.split(" ")[4]))
   .map(line => {
-    const time = (parseInt(line.split(" ")[0]) / 1000).toFixed(0);
+    const time = new Date(parseInt(line.split(" ")[0]) / 1000);
     const username = line.split(" ")[4];
     const srcIP = line.split(" ")[10];
     const dstIP = line.split(" ")[11];
     const dstPort = line.split(" ")[14];
     const host = line.split(" ")[16];
-    return [time, username, srcIP, dstIP, host, dstPort];
+    return [time.getSeconds(), username, srcIP, dstIP, host, dstPort];
   });
 
 data.pop();

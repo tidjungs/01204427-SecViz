@@ -28,8 +28,10 @@ const getTypeCount = lines => {
   });
 
   items.sort((first, second) => second[1] - first[1]);
-  return items.slice(0, 100).map(i => ({ name: i[0], value: i[1] }));
+  return items;
+  // return items.slice(0, 100).map(i => ({ name: i[0], value: i[1] }));
 };
+console.log(getTypeCount(ingressLines));
 
-console.log(JSON.stringify(getTypeCount(egressLines)));
-console.log(JSON.stringify(getTypeCount(ingressLines)));
+// console.log(JSON.stringify(getTypeCount(egressLines)));
+// console.log(JSON.stringify(getTypeCount(ingressLines)));
