@@ -1,1 +1,23 @@
 @import '~antd/dist/antd.css';
+
+.BasicGraph {
+  text-align: center;
+  background: rgb(51, 51, 51);
+}
+
+.group {
+  padding: 20px;
+  display: flex;
+}
+
+.box {
+  width: 33%;
+}
+
+.box-2 {
+  width: 50%;
+}
+
+.box-3 {
+  width: 100%;
+}
