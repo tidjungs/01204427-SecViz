@@ -6,9 +6,7 @@ const getOption = data => ({
   parallelAxis: [
     {
       dim: 0,
-      name: 'Time',
-      type: 'category',
-      data: [...new Set(data.map(d => d[0]))],
+      name: 'Time 03.00 AM (sec)',
     },
     {
       dim: 1,
@@ -50,7 +48,11 @@ const getOption = data => ({
 });
 
 const TreeMap = props => (
-  <ReactEcharts option={getOption(props.data)} theme={'dark'} />
+  <ReactEcharts
+    style={{ height: '600px' }}
+    option={getOption(props.data)}
+    theme={'dark'}
+  />
 );
 
 TreeMap.propTypes = {

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import './Home.css';
 import connectImg from '../img/connect.png';
 import basicGraphImg from '../img/basic-graph.png';
+import advGraphImg from '../img/adv-graph.png';
 
 class Home extends Component {
   state = {
@@ -25,7 +26,7 @@ class Home extends Component {
         description:
           'Analytics and Visualization from Web Logs usin Advanced Graph',
         url: '/week4',
-        img: '',
+        img: advGraphImg,
       },
     ],
   };

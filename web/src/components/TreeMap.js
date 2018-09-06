@@ -12,7 +12,11 @@ const getOption = data => ({
 });
 
 const TreeMap = props => (
-  <ReactEcharts option={getOption(props.data)} theme={'dark'} />
+  <ReactEcharts
+    style={{ height: '600px' }}
+    option={getOption(props.data)}
+    theme={'dark'}
+  />
 );
 
 TreeMap.propTypes = {

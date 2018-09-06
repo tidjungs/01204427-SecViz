@@ -19,12 +19,16 @@ const getOption = (indexs, data) => ({
 });
 
 const BarChart = props => (
-  <ReactEcharts option={getOption(props.indexs, props.data)} theme={'dark'} />
+  <ReactEcharts
+    style={{ height: '600px' }}
+    option={getOption(props.indexs, props.data)}
+    theme={'dark'}
+  />
 );
 
 BarChart.propTypes = {
   indexs: PropTypes.array,
-  data: PropTypes.data,
+  data: PropTypes.array,
 };
 
 export default BarChart;
