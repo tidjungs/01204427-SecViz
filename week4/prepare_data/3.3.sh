@@ -1,1 +1,1 @@
-cut -d ' ' -f 11,17 ./raw_data/web-anon-2017041003* | grep "^158\.108\|^10\.\|^2406:3100:" | cut -d ' ' -f2 | sort | uniq -c | sort -r | head -20
+cut -d ' ' -f 11,17 ./raw_data/web-anon-2017041003* | grep "^158\.108\|^10\.\|^2406:3100:" | cut -d ' ' -f2 | sort | uniq -c | sort -r | head -100
