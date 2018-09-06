@@ -43,6 +43,14 @@ const getOption = data => ({
     {
       type: 'parallel',
       data: data,
+      smooth: true,
+      lineStyle: {
+        normal: {
+          color: '#577ceb',
+          width: 0.5,
+          opacity: 0.6,
+        },
+      },
     },
   ],
 });
